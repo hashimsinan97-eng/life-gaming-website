@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Gaming - منصة اللاعبين الاجتماعية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff3366;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #28a745;
+            --warning: #ffc107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0f0f1e;
+            color: #e6e6e6;
+            line-height: 1.6;
+            background-image: linear-gradient(to bottom, #0f0f1e 0%, #1a1a2e 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* الترويسة */
+        header {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: #e6e6e6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        /* القسم الرئيسي */
+        .hero {
+            padding: 5rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(106, 17, 203, 0.2) 0%, rgba(37, 117, 252, 0.1) 50%, transparent 100%);
+            z-index: -1;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: #cccccc;
+        }
+        
+        .countdown {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem auto;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .countdown h2 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .countdown-unit {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            min-width: 80px;
+        }
+        
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            color: #cccccc;
+        }
+        
+        /* الأقسام */
+        .section-title {
+            text-align: center;
+            margin: 3rem 0 2rem;
+            color: var(--secondary);
+            font-size: 2.2rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(26, 26, 46, 0.6);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        /* التذييل */
+        footer {
+            background: rgba(15, 15, 30, 0.9);
+            padding: 3rem 0 1.5rem;
+            margin-top: 5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* responsive design */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .countdown-timer {
+                flex-wrap: wrap;
+            }
+            
+            .auth-buttons {
+                display: none;
+            }
+        }
+        
+        /* تأثيرات للعناصر */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(106, 17, 203, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(106, 17, 203, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(106, 17, 203, 0);
+            }
+        }
+        
+        /* نموذج تسجيل الدخول */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .auth-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(26, 26, 46, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5rem;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .auth-tab.active {
+            border-bottom: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .form-options a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- الترويسة -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-gamepad"></i>
+                    <span class="logo-text">Life Gaming</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#"><i class="fas fa-home"></i> الرئيسية</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> الأصدقاء</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> اليوميات</a></li>
+                    <li><a href="#"><i class="fas fa-door-open"></i> الرومات</a></li>
+                    <li><a href="#"><i class="fas fa-gift"></i> الجوائز</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="#" class="btn btn-outline" id="login-btn"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</a>
+                    <a href="#" class="btn btn-primary" id="register-btn"><i class="fas fa-user-plus"></i> إنشاء حساب</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>مرحباً بك في Life Gaming</h1>
+                <p>منصة اجتماعية متكاملة تجمع عشاق الألعاب الإلكترونية في مكان واحد. تواصل، العب، واستمتع بتجربة فريدة من نوعها.</p>
+                
+                <div class="countdown">
+                    <h2> العد التنازلي للإطلاق الرسمي</h2>
+                    <div class="countdown-timer">
+                        <div class="countdown-unit">
+                            <div class="countdown-value">7</div>
+                            <div class="countdown-label">أيام</div>
+                        </div>
+                        <div class="countdown-unit">
+                            <div class="countdown-value">12</div>
+                            <div class="countdown-label">ساعات</div>
+                        </div>
+                        <div class="countdown-unit">
+                            <div class="countdown-value">45</div>
+                            <div class="countdown-label">دقائق</div>
+                        </div>
+                        <div class="countdown-unit">
+                            <div class="countdown-value">30</div>
+                            <div class="countdown-label">ثواني</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="#" class="btn btn-primary pulse" id="main-register-btn"><i class="fas fa-bell"></i> اشترك الآن للإشعارات</a>
+            </div>
+        </section>
+
+        <section class="container">
+            <h2 class="section-title">مميزات المنصة</h2>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>نظام الصداقات</h3>
+                    <p>ابحث عن أصدقاء جدد، أرسل طلبات صداقة وتواصل مع اللاعبين الذين يشاركونك نفس الاهتمامات</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <h3>سهرات الأفلام</h3>
+                    <p>استمتع بمشاهدة الأفلام مع أصدقائك في رومات خاصة مع نظام تصويت لاختيار الأفلام</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>نظام المنافسات</h3>
+                    <p>شارك في المنافسات، احصل على جوائز وارتقِ بمستواك لتصبح الأفضل بين اللاعبين</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-blog"></i>
+                    </div>
+                    <h3>اليوميات التفاعلية</h3>
+                    <p>شارك تجاربك في اللعب، اكتب يومياتك وتفاعل مع يوميات الآخرين من خلال التعليقات</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-gifts"></i>
+                    </div>
+                    <h3>الهدايا والجوائز</h3>
+                    <p>احصل على هدايا وجوائز قيمة مقابل مشاركاتك وتفاعلك في المنصة</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>اللاعبون القريبون</h3>
+                    <p>اكتشف اللاعبين القريبين منك وتواصل معهم للعب سوياً أو تنظيم لقاءات</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="container">
+            <h2 class="section-title">كيفية استخدام الموقع</h2>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>إنشاء حساب</h3>
+                    <p>قم بتسجيل حساب جديد في دقائق معدودة واستمتع بكافة ميزات المنصة</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>بناء شبكة صداقات</h3>
+                    <p>ابحث عن أصدقاء جدد أو ادعُ أصدقائك الحاليين للانضمام إلى المنصة</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3>بدء اللعب والتواصل</h3>
+                    <p>انضم إلى الرومات، شارك في المنافسات واستمتع بتجربة gaming اجتماعية حقيقية</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- التذييل -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Life Gaming</h3>
+                    <p>منصة اجتماعية متكاملة تجمع عشاق الألعاب الإلكترونية في مكان واحد. تواصل، العب، واستمتع بتجربة فريدة من نوعها.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-angle-left"></i> الرئيسية</a></li>
+                        <li><a href="#"><i class="fas fa-angle-left"></i> من نحن</a></li>
+                        <li><a href="#"><i class="fas fa-angle-left"></i> الميزات</a></li>
+                        <li><a href="#"><i class="fas fa-angle-left"></i> الأسئلة الشائعة</a></li>
+                        <li><a href="#"><i class="fas fa-angle-left"></i> اتصل بنا</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>الدعم والمساعدة</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-angle-left"></i> مركز المساعدة</a></li>
+                        <li><a href="#"><i class="fas fa-angle-left"></i> شروط الخدمة</a></li>
+                        <li><a href="#"><i class="fas fa-angle-left"></i> سياسة الخصوصية</a></li>
+                        <li><a href="#"><i class="fas fa-angle-left"></i> الإبلاغ عن مشكلة</a></li>
+                        <li><a href="#"><i class="fas fa-angle-left"></i> تقديم اقتراح</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2023 Life Gaming. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- نموذج تسجيل الدخول / إنشاء حساب -->
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">تسجيل الدخول</div>
+                <div class="auth-tab" data-tab="register">إنشاء حساب</div>
+            </div>
+            
+            <form class="auth-form active" id="login-form">
+                <div class="form-group">
+                    <label for="login-email">البريد الإلكتروني</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">كلمة المرور</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                
+                <div class="form-options">
+                    <label>
+                        <input type="checkbox"> تذكرني
+                    </label>
+                    <a href="#">نسيت كلمة المرور?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">تسجيل الدخول</button>
+            </form>
+            
+            <form class="auth-form" id="register-form">
+                <div class="form-group">
+                    <label for="register-username">اسم المستخدم</label>
+                    <input type="text" id="register-username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-email">البريد الإلكتروني</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-password">كلمة المرور</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-confirm-password">تأكيد كلمة المرور</label>
+                    <input type="password" id="register-confirm-password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">إنشاء حساب</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // عد تنازلي لمدة 7 أيام من الآن
+        const countdown = () => {
+            const now = new Date();
+            const launchDate = new Date(now.getTime() + (7 * 24 * 60 * 60 * 1000)); // 7 أيام من الآن
+            
+            const updateCountdown = () => {
+                const currentTime = new Date();
+                const diff = launchDate - currentTime;
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.querySelectorAll('.countdown-value')[0].textContent = days;
+                document.querySelectorAll('.countdown-value')[1].textContent = hours;
+                document.querySelectorAll('.countdown-value')[2].textContent = minutes;
+                document.querySelectorAll('.countdown-value')[3].textContent = seconds;
+            };
+            
+            // تحديث العد التنازلي كل ثانية
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+        };
+        
+        // إدارة نموذج المصادقة
+        const authModal = document.getElementById('auth-modal');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const mainRegisterBtn = document.getElementById('main-register-btn');
+        const closeModal = document.getElementById('close-modal');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const authForms = document.querySelectorAll('.auth-form');
+        
+        // فتح النموذج
+        [loginBtn, registerBtn, mainRegisterBtn].forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                authModal.style.display = 'block';
+                
+                // إذا كان زر التسجيل، انتقل إلى علامة التبويب "إنشاء حساب"
+                if (btn === registerBtn || btn === mainRegisterBtn) {
+                    switchAuthTab('register');
+                }
+            });
+        });
+        
+        // إغلاق النموذج
+        closeModal.addEventListener('click', () => {
+            authModal.style.display = 'none';
+        });
+        
+        // إغلاق النموذج عند النقر خارج المحتوى
+        window.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.style.display = 'none';
+            }
+        });
+        
+        // تبديل علامات التبويب
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                switchAuthTab(tabId);
+            });
+        });
+        
+        function switchAuthTab(tabId) {
+            // تحديد علامة التبويب النشطة
+            authTabs.forEach(tab => {
+                if (tab.getAttribute('data-tab') === tabId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // تحديث النموذج النشط
+            authForms.forEach(form => {
+                if (form.id === `${tabId}-form`) {
+                    form.classList.add('active');
+                } else {
+                    form.classList.remove('active');
+                }
+            });
+        }
+        
+        // منع إرسال النماذج (لأغراض العرض فقط)
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('تم محاكاة عملية تسجيل الدخول بنجاح!');
+            authModal.style.display = 'none';
+        });
+        
+        document.getElementById('register-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('تم محاكاة عملية إنشاء حساب بنجاح!');
+            authModal.style.display = 'none';
+        });
+        
+        // بدء العد التنازلي عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', countdown);
+    </script>
+</body>
+</html>
